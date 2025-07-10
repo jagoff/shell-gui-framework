@@ -33,10 +33,7 @@ A universal framework for creating stunning, interactive command-line interfaces
 
 ### 1. Install Dependencies
 ```bash
-# Option A: Using Makefile (recommended)
-make install-deps
-
-# Option B: Manual installation
+# Manual installation
 brew install gum  # macOS
 # or
 sudo apt-get install gum  # Ubuntu/Debian
@@ -100,13 +97,10 @@ else
 fi
 ```
 
-### 3. Run Tests
+### 3. Test the Framework
 ```bash
-# Run the test suite
-make test
-
-# Or manually
-./test_gui_framework.sh
+# Run the demo
+./demo-usage.sh
 ```
 
 ## 📁 Repository Structure

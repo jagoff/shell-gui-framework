@@ -67,7 +67,8 @@ install_framework() {
     cat > "$BIN_DIR/gui-framework" << 'EOF'
 #!/bin/bash
 source "$HOME/.local/share/universal-shell-gui-framework/gui_framework.sh"
-gui_framework_main "$@"
+init_gui_framework
+show_enhanced_main_menu "$@"
 EOF
     
     chmod +x "$BIN_DIR/gui-framework"
