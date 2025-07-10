@@ -1,6 +1,6 @@
 #!/bin/bash
 # gui_framework.sh - Universal Shell GUI Framework (English Only)
-# Version: 1.0.0
+# Version: 1.1.0
 # Compatible with: bash, zsh
 # Dependency: gum
 
@@ -22,6 +22,13 @@ log_warning() { echo -e "${C_YELLOW}⚠️  $1${C_NC}"; }
 log_info() { echo -e "${C_BLUE}ℹ️  $1${C_NC}"; }
 log_debug() { echo -e "${C_GRAY}[DEBUG] $1${C_NC}"; }
 log_verbose() { if [[ "${VERBOSE:-false}" = true ]]; then echo -e "${C_GRAY}   [VERBOSE] $1${C_NC}"; fi; }
+
+# --- EXIT HANDLING ---
+handle_quit() {
+    local message="${1:-Exiting..."}"
+    log_info "$message"
+    exit 0
+}
 
 # --- GUM VERSION DETECTION ---
 get_gum_version() {
@@ -71,7 +78,7 @@ require_tty() {
     fi
 }
 
-# --- GUI COMPONENTS ---
+# --- GUI COMPONENTS WITH 'q' EXIT FUNCTIONALITY ---
 show_gui_menu() {
     require_tty
     local title="$1"
@@ -79,11 +86,22 @@ show_gui_menu() {
     local header="$3"
     shift 3
     local options=("$@")
+    
     echo -e "${C_BLUE}📋 $title${C_NC}"
     echo -e "${C_GRAY}$subtitle${C_NC}"
-    gum choose \
+    echo -e "${C_GRAY}←→ toggle • enter submit • q Quit${C_NC}"
+    
+    local result
+    result=$(gum choose \
         --header="$header" \
-        "${options[@]}"
+        "${options[@]}")
+    
+    # Check if user pressed 'q' or cancelled
+    if [[ -z "$result" ]]; then
+        handle_quit "Menu cancelled by user"
+    fi
+    
+    echo "$result"
 }
 
 show_gui_multi_select() {
@@ -94,34 +112,78 @@ show_gui_multi_select() {
     local limit="${4:-5}"
     shift 4
     local options=("$@")
+    
     echo -e "${C_BLUE}📋 $title${C_NC}"
     echo -e "${C_GRAY}$subtitle${C_NC}"
-    gum choose \
+    echo -e "${C_GRAY}←→ toggle • space select • enter submit • q Quit${C_NC}"
+    
+    local result
+    result=$(gum choose \
         --header="$header" \
         --limit="$limit" \
-        "${options[@]}"
+        "${options[@]}")
+    
+    # Check if user pressed 'q' or cancelled
+    if [[ -z "$result" ]]; then
+        handle_quit "Multi-select cancelled by user"
+    fi
+    
+    echo "$result"
 }
 
 show_gui_confirmation() {
     require_tty
     local message="$1"
-    local affirmative="${2:-Yes, continue}"
-    local negative="${3:-No, cancel}"
-    gum confirm \
-        --affirmative="$affirmative" \
-        --negative="$negative" \
-        "$message"
-    local result=$?
-    return $result
+    local affirmative="Yes, continue"
+    local negative="No, cancel"
+    
+    echo -e "${C_GRAY}y Yes, continue • n No, cancel • q Quit${C_NC}"
+    
+    # Use a custom approach to handle 'q' exit
+    local choice
+    choice=$(gum choose \
+        --header="$message" \
+        "$affirmative" \
+        "$negative" \
+        "Quit (q)")
+    
+    case "$choice" in
+        "$affirmative")
+            return 0
+            ;;
+        "$negative"|"Quit (q)")
+            handle_quit "Confirmation cancelled by user"
+            ;;
+        *)
+            # User cancelled or pressed Ctrl+C
+            handle_quit "Confirmation cancelled by user"
+            ;;
+    esac
 }
 
 show_gui_input() {
     require_tty
     local prompt="$1"
     local placeholder="${2:-}"
-    gum input \
+    
+    echo -e "${C_GRAY}type and enter submit • q Quit${C_NC}"
+    
+    local result
+    result=$(gum input \
         --prompt="$prompt" \
-        --placeholder="$placeholder"
+        --placeholder="$placeholder")
+    
+    # Check if user pressed 'q' or cancelled
+    if [[ -z "$result" ]]; then
+        handle_quit "Input cancelled by user"
+    fi
+    
+    # Check if user entered 'q' to quit
+    if [[ "$result" == "q" ]]; then
+        handle_quit "Input cancelled by user"
+    fi
+    
+    echo "$result"
 }
 
 show_gui_spinner() {
@@ -140,6 +202,35 @@ show_gui_progress() {
         --percent="$percent" \
         --width=50 \
         --title="$title"
+}
+
+# --- ENHANCED MENU WITH QUIT OPTION ---
+show_gui_menu_with_quit() {
+    require_tty
+    local title="$1"
+    local subtitle="$2"
+    local header="$3"
+    shift 3
+    local options=("$@")
+    
+    # Add quit option to the menu
+    local menu_options=("${options[@]}" "Quit (q)")
+    
+    echo -e "${C_BLUE}📋 $title${C_NC}"
+    echo -e "${C_GRAY}$subtitle${C_NC}"
+    echo -e "${C_GRAY}←→ toggle • enter submit • q Quit${C_NC}"
+    
+    local result
+    result=$(gum choose \
+        --header="$header" \
+        "${menu_options[@]}")
+    
+    # Check if user selected quit or cancelled
+    if [[ -z "$result" ]] || [[ "$result" == "Quit (q)" ]]; then
+        handle_quit "Menu cancelled by user"
+    fi
+    
+    echo "$result"
 }
 
 # --- GUM CONFIGURATION (OPTIONAL) ---
