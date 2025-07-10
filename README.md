@@ -1,12 +1,12 @@
-# 🎨 Universal Shell GUI Framework
+# Universal Shell GUI Framework
 
 > **The definitive standard for beautiful, modern CLI interfaces in shell projects**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Shell: Bash/Zsh](https://img.shields.io/badge/Shell-Bash%2FZsh-blue.svg)](https://www.gnu.org/software/bash/)
+[![Shell: Bash/Zsh/Fish](https://img.shields.io/badge/Shell-Bash%2FZsh%2FFish-blue.svg)](https://www.gnu.org/software/bash/)
 [![GUI: Gum](https://img.shields.io/badge/GUI-Gum-green.svg)](https://github.com/charmbracelet/gum)
 
-A universal framework for creating stunning, interactive command-line interfaces using `gum`. This framework provides a standardized approach to building modern, user-friendly shell applications with consistent design patterns and robust error handling.
+A universal framework for creating stunning, interactive command-line interfaces using `gum`. This framework provides a standardized approach to building modern, user-friendly shell applications with consistent design patterns, robust error handling, and enterprise-level features.
 
 ## ✨ Features
 
@@ -124,20 +124,9 @@ universal-shell-gui-framework/
 │   ├── default.conf          # Default theme
 │   ├── dark.conf             # Dark theme
 │   └── high-contrast.conf    # High contrast theme
-├── examples/
-│   └── basic_example.sh      # Basic example
-├── docs/
-│   ├── FRAMEWORK_GUIDE.md    # Complete framework guide
-│   ├── BEST_PRACTICES.md     # Best practices
-│   ├── COMPONENTS.md         # Available components
-│   └── EXAMPLES.md           # More examples
 ├── install.sh                # Installation script
-├── include.sh                # One-liner inclusion
-├── quick-start.sh            # Quick start guide
 ├── demo-usage.sh             # Interactive demo
-├── test_gui_framework.sh     # Test suite
-├── Makefile                  # Build automation
-└── package.json              # Project metadata
+└── LICENSE                   # MIT License
 ```
 
 ## 🎯 Core Components
@@ -257,107 +246,51 @@ generate_error_report
 
 ## 📚 Documentation
 
-- **[API Reference](docs/API_REFERENCE.md)** - Complete function reference
-- **[Framework Guide](docs/FRAMEWORK_GUIDE.md)** - Complete implementation guide
-- **[Best Practices](docs/BEST_PRACTICES.md)** - Design and coding standards
-- **[Components](docs/COMPONENTS.md)** - All available GUI components
-- **[Examples](docs/EXAMPLES.md)** - Real-world usage examples
+All documentation is included in the README and the interactive demo. The framework is self-documenting with clear function names and comprehensive examples.
 
 ## 🛠️ Development
 
 ### Testing
 ```bash
-# Run all tests
-make test
-
-# Run specific test categories
-./test_gui_framework.sh
+# Run the demo to test functionality
+./demo-usage.sh
 ```
 
 ### Code Quality
 ```bash
-# Lint shell scripts
-make lint
-
-# Format code
-make format
-
-# Full validation
-make validate
-```
-
-### Building
-```bash
-# Create distribution package
-make package
-
-# Create release archive
-make release
-```
-
-### Development Setup
-```bash
-# Set up development environment
-make dev-setup
+# Check script syntax
+bash -n gui_framework.sh
+bash -n theme_manager.sh
+bash -n error_handler.sh
+bash -n shell_compatibility.sh
+bash -n integrations.sh
+bash -n enhanced_menu.sh
 ```
 
 ## 🔧 Installation
 
-### 🚀 Quick Installation (Recommended)
-
-#### Option 1: One-liner Installation
+### 🚀 Quick Installation
 ```bash
-# Install from any Git repository
+# Install from GitHub
 curl -sSL https://raw.githubusercontent.com/jagoff/shell-gui-framework/main/install.sh | bash
 ```
 
-#### Option 2: Clone and Install
-```bash
-# Clone and install
-git clone https://github.com/jagoff/shell-gui-framework.git
-cd shell-gui-framework
-./install.sh
-```
-
-#### Option 3: Direct Inclusion in Scripts
-```bash
-# Include directly in your script (no installation needed)
-source <(curl -sSL https://raw.githubusercontent.com/jagoff/shell-gui-framework/main/gui_framework.sh)
-```
-
 ### 📦 Manual Installation
-
-#### Option 1: Direct Download
-```bash
-# Download the framework
-curl -O https://raw.githubusercontent.com/jagoff/shell-gui-framework/main/gui_framework.sh
-
-# Make it executable
-chmod +x gui_framework.sh
-
-# Include in your script
-source ./gui_framework.sh
-```
-
-#### Option 2: Git Clone
 ```bash
 # Clone the repository
 git clone https://github.com/jagoff/shell-gui-framework.git
+cd shell-gui-framework
 
-# Copy the framework to your project
-cp shell-gui-framework/gui_framework.sh ./gui_framework.sh
-
-# Include in your script
-source ./gui_framework.sh
+# Install dependencies
+brew install gum  # macOS
+# or
+sudo apt-get install gum  # Ubuntu/Debian
 ```
 
-### 🔄 Updating
+### 🔄 Direct Usage
 ```bash
-# Update existing installation
-gui-framework update
-
-# Or manually
-./install.sh -u
+# Include directly in your script
+source <(curl -sSL https://raw.githubusercontent.com/jagoff/shell-gui-framework/main/gui_framework.sh)
 ```
 
 ## 🎯 Usage Examples
@@ -469,66 +402,52 @@ git_workflow() {
 }
 ```
 
-## 🆕 What's New in Enhanced Edition
+## 🆕 Enhanced Features
 
 ### 🎨 Theme System
-- **Customizable Colors**: Full color scheme customization
-- **Multiple Themes**: Default, Dark, and High Contrast themes
-- **User Themes**: Create and manage custom themes
-- **Accessibility**: High contrast mode for visual impairments
+- Customizable colors, fonts, and layouts
+- Multiple themes: Default, Dark, and High Contrast
+- User theme creation and management
+- Accessibility support
 
 ### 🔧 Multi-Shell Compatibility
-- **Bash Support**: Full compatibility with bash 4.0+
-- **Zsh Support**: Optimized for zsh 5.0+
-- **Fish Support**: Limited compatibility with fish 3.0+
-- **Auto-Detection**: Automatic shell detection and configuration
+- Full support for bash, zsh, and fish
+- Automatic shell detection and configuration
+- Cross-shell function adaptations
 
 ### 🛠️ Tool Integrations
-- **Git Integration**: Repository browser, branch manager, status viewer
-- **Docker Integration**: Container and image management
-- **FZF Integration**: Enhanced file browsing and search
-- **GitHub CLI**: Repository browsing and issue management
-- **Package Managers**: Homebrew, apt, yum, pacman support
+- Git repository browser and management
+- Docker container and image management
+- FZF file browsing and search
+- GitHub CLI integration
+- Package manager support
 
 ### 📊 Advanced Error Handling
-- **Categorized Errors**: Dependency, permission, network, validation errors
-- **User-Friendly Messages**: Clear, actionable error messages
-- **Error Reports**: Detailed error reports for debugging
-- **Log Rotation**: Automatic log management and cleanup
+- Categorized error types with user-friendly messages
+- Detailed error reports and logging
+- Automatic log rotation and cleanup
 
-### 🌐 Accessibility Features
-- **High Contrast Themes**: Optimized for visual impairments
-- **Screen Reader Support**: ARIA-compliant output
-- **Reduced Motion**: Support for users with motion sensitivity
-- **Keyboard Navigation**: Full keyboard accessibility
+### 🌐 Accessibility
+- High contrast themes for visual impairments
+- Screen reader support and keyboard navigation
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+4. Submit a pull request
 
-### Development Guidelines
+### Guidelines
 - Follow shell scripting best practices
-- Add error handling for all new functions
-- Include documentation for new features
+- Add error handling for new functions
 - Test on multiple shells (bash, zsh, fish)
 - Ensure accessibility compliance
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Charmbracelet](https://charm.sh/) for the amazing `gum` tool
-- The shell scripting community for best practices
-- All contributors who help improve this framework
+MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
-**Made with ❤️ for the shell community**
-
-> *"Beautiful interfaces shouldn't be limited to web apps"* 
+**Made with ❤️ for the shell community** 
