@@ -1,0 +1,398 @@
+# Dependabot configuration for Universal Shell GUI Framework
+version: 2
+updates:
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"
+    commit-message:
+      prefix: "🔄"
+      include: "scope"
+
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "docker"
+      - "automated"
+    commit-message:
+      prefix: "🐳"
+      include: "scope"
+
+  # Enable version updates for npm (if we add package.json later)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "npm"
+      - "automated"
+    commit-message:
+      prefix: "📦"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for now
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for pip (if we add Python files)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "pip"
+      - "automated"
+    commit-message:
+      prefix: "🐍"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for now
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for bundler (if we add Ruby files)
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "bundler"
+      - "automated"
+    commit-message:
+      prefix: "💎"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for now
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for cargo (if we add Rust files)
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "cargo"
+      - "automated"
+    commit-message:
+      prefix: "🦀"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for now
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for gomod (if we add Go files)
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "gomod"
+      - "automated"
+    commit-message:
+      prefix: "🐹"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for now
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for maven (if we add Java files)
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "maven"
+      - "automated"
+    commit-message:
+      prefix: "☕"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for now
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for gradle (if we add Gradle files)
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "gradle"
+      - "automated"
+    commit-message:
+      prefix: "📚"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for now
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for composer (if we add PHP files)
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "composer"
+      - "automated"
+    commit-message:
+      prefix: "🐘"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for now
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for nuget (if we add .NET files)
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "nuget"
+      - "automated"
+    commit-message:
+      prefix: "🔷"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for now
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for terraform (if we add Terraform files)
+  - package-ecosystem: "terraform"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "terraform"
+      - "automated"
+    commit-message:
+      prefix: "🏗️"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for now
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for pub (if we add Dart files)
+  - package-ecosystem: "pub"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "pub"
+      - "automated"
+    commit-message:
+      prefix: "🎯"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for now
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for hex (if we add Elixir files)
+  - package-ecosystem: "hex"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "hex"
+      - "automated"
+    commit-message:
+      prefix: "⚗️"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for now
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for swift (if we add Swift files)
+  - package-ecosystem: "swift"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "swift"
+      - "automated"
+    commit-message:
+      prefix: "🦅"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for now
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for elm (if we add Elm files)
+  - package-ecosystem: "elm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "elm"
+      - "automated"
+    commit-message:
+      prefix: "🌳"
+      include: "scope"
+    ignore:
+      # Ignore major version updates for now
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # Enable version updates for submodules (if we add submodules)
+  - package-ecosystem: "gitsubmodule"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "jagoff"
+    assignees:
+      - "jagoff"
+    labels:
+      - "dependencies"
+      - "submodule"
+      - "automated"
+    commit-message:
+      prefix: "📁"
+      include: "scope" 

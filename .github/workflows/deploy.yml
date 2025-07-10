@@ -1,0 +1,461 @@
+name: 🚀 Automated Deployment
+
+on:
+  push:
+    tags:
+      - 'v*'
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      deploy_target:
+        description: 'Deployment target'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+        - all
+        - github-release
+        - documentation
+        - docker
+
+jobs:
+  # 🏷️ Create Release
+  create-release:
+    name: 🏷️ Create GitHub Release
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🏷️ Extract version
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "VERSION=$VERSION"
+
+      - name: 📋 Create release notes
+        id: release_notes
+        run: |
+          echo "📋 Generating release notes..."
+          
+          # Get commits since last release
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          
+          if [[ -n "$PREVIOUS_TAG" ]]; then
+            CHANGELOG=$(git log --pretty=format:"- %s" $PREVIOUS_TAG..HEAD)
+          else
+            CHANGELOG=$(git log --pretty=format:"- %s" --reverse)
+          fi
+          
+          # Create release body
+          cat > release_notes.md << EOF
+          ## 🎉 Universal Shell GUI Framework ${{ steps.version.outputs.version }}
+          
+          ### 🚀 What's New
+          $CHANGELOG
+          
+          ### 📦 Installation
+          \`\`\`bash
+          # Quick install
+          curl -sSL https://raw.githubusercontent.com/jagoff/shell-gui-framework/main/install.sh | bash
+          
+          # Manual install
+          git clone https://github.com/jagoff/shell-gui-framework.git
+          cd shell-gui-framework
+          ./install.sh
+          \`\`\`
+          
+          ### 🎯 Quick Start
+          \`\`\`bash
+          source ./gui_framework.sh
+          init_gui_framework
+          show_enhanced_main_menu
+          \`\`\`
+          
+          ### 📚 Documentation
+          - [README](README.md)
+          - [Contributing](CONTRIBUTING.md)
+          - [Roadmap](ROADMAP.md)
+          
+          ### 🔧 System Requirements
+          - Bash 4.0+ or Zsh 5.0+
+          - Gum 0.13.0+
+          - Linux/macOS/WSL
+          
+          ### 🐛 Bug Reports & Feature Requests
+          Please use [GitHub Issues](https://github.com/jagoff/shell-gui-framework/issues)
+          
+          ### 🤝 Contributing
+          We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+          
+          ---
+          
+          **Made with ❤️ for the shell community**
+          EOF
+          
+          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+          cat release_notes.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: 📦 Create distribution package
+        run: |
+          echo "📦 Creating distribution package..."
+          
+          # Create dist directory
+          mkdir -p dist
+          
+          # Copy framework files
+          cp *.sh dist/
+          cp -r themes dist/
+          cp README.md dist/
+          cp LICENSE dist/
+          cp CONTRIBUTING.md dist/
+          cp ROADMAP.md dist/
+          
+          # Create version file
+          echo "FRAMEWORK_VERSION=${{ steps.version.outputs.version }}" > dist/VERSION
+          echo "BUILD_DATE=$(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> dist/VERSION
+          echo "GITHUB_SHA=${{ github.sha }}" >> dist/VERSION
+          
+          # Create archive
+          tar -czf "dist/universal-shell-gui-framework-${{ steps.version.outputs.version }}.tar.gz" -C dist .
+          
+          # Create checksum
+          sha256sum "dist/universal-shell-gui-framework-${{ steps.version.outputs.version }}.tar.gz" > "dist/universal-shell-gui-framework-${{ steps.version.outputs.version }}.tar.gz.sha256"
+
+      - name: 🚀 Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: "Universal Shell GUI Framework ${{ steps.version.outputs.version }}"
+          body: ${{ steps.release_notes.outputs.release_notes }}
+          files: |
+            dist/universal-shell-gui-framework-${{ steps.version.outputs.version }}.tar.gz
+            dist/universal-shell-gui-framework-${{ steps.version.outputs.version }}.tar.gz.sha256
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # 📚 Deploy Documentation
+  deploy-docs:
+    name: 📚 Deploy Documentation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' || github.ref == 'refs/heads/main'
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📚 Generate documentation
+        run: |
+          echo "📚 Generating documentation..."
+          
+          # Create docs directory
+          mkdir -p docs
+          
+          # Generate API documentation
+          cat > docs/API.md << 'EOF'
+          # API Reference - Universal Shell GUI Framework
+          
+          ## Core Functions
+          
+          ### show_gui_menu(title, subtitle, header, ...options)
+          Display a selection menu with the given options.
+          
+          **Parameters:**
+          - `title`: Menu title
+          - `subtitle`: Menu subtitle
+          - `header`: Selection header
+          - `...options`: List of options
+          
+          **Returns:** Selected option
+          
+          **Example:**
+          ```bash
+          choice=$(show_gui_menu "My App" "Choose action" "Action:" "Start" "Stop" "Restart")
+          ```
+          
+          ### show_gui_confirmation(message)
+          Display a confirmation dialog.
+          
+          **Parameters:**
+          - `message`: Confirmation message
+          
+          **Returns:** 0 if confirmed, 1 if cancelled
+          
+          **Example:**
+          ```bash
+          if show_gui_confirmation "Continue?"; then
+            echo "User confirmed"
+          fi
+          ```
+          
+          ### show_gui_input(prompt, placeholder)
+          Display an input dialog.
+          
+          **Parameters:**
+          - `prompt`: Input prompt
+          - `placeholder`: Placeholder text
+          
+          **Returns:** User input
+          
+          **Example:**
+          ```bash
+          name=$(show_gui_input "Enter name:" "John Doe")
+          ```
+          
+          ### gui_log_success(message)
+          Log a success message.
+          
+          **Parameters:**
+          - `message`: Success message
+          
+          **Example:**
+          ```bash
+          gui_log_success "Operation completed successfully"
+          ```
+          
+          ## Theme Functions
+          
+          ### load_theme(theme_name)
+          Load a theme by name.
+          
+          **Parameters:**
+          - `theme_name`: Theme name (default, dark, high-contrast)
+          
+          **Example:**
+          ```bash
+          load_theme "dark"
+          ```
+          
+          ## Error Handling Functions
+          
+          ### log_error(category, severity, message, details)
+          Log an error with details.
+          
+          **Parameters:**
+          - `category`: Error category
+          - `severity`: Error severity (1-4)
+          - `message`: Error message
+          - `details`: Additional details
+          
+          **Example:**
+          ```bash
+          log_error "validation" "high" "Invalid input" "User entered invalid email"
+          ```
+          EOF
+          
+          # Generate installation guide
+          cat > docs/INSTALLATION.md << 'EOF'
+          # Installation Guide - Universal Shell GUI Framework
+          
+          ## Quick Installation
+          
+          ### One-liner Install
+          ```bash
+          curl -sSL https://raw.githubusercontent.com/jagoff/shell-gui-framework/main/install.sh | bash
+          ```
+          
+          ### Manual Installation
+          ```bash
+          # Clone repository
+          git clone https://github.com/jagoff/shell-gui-framework.git
+          cd shell-gui-framework
+          
+          # Install dependencies
+          brew install gum  # macOS
+          # or
+          sudo apt-get install gum  # Ubuntu/Debian
+          
+          # Install framework
+          ./install.sh
+          ```
+          
+          ## System Requirements
+          
+          - **Shell:** Bash 4.0+ or Zsh 5.0+
+          - **Gum:** 0.13.0+
+          - **OS:** Linux, macOS, or WSL
+          
+          ## Verification
+          
+          After installation, verify the framework works:
+          
+          ```bash
+          # Test installation
+          gui-framework
+          
+          # Or run demo
+          ./demo-usage.sh
+          ```
+          
+          ## Troubleshooting
+          
+          ### Gum not found
+          ```bash
+          # Install gum manually
+          brew install gum  # macOS
+          sudo apt-get install gum  # Ubuntu/Debian
+          ```
+          
+          ### Permission denied
+          ```bash
+          # Make scripts executable
+          chmod +x *.sh
+          ```
+          
+          ### Shell compatibility issues
+          ```bash
+          # Check shell version
+          bash --version
+          zsh --version
+          ```
+          EOF
+
+      - name: 📤 Upload documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation
+          path: docs/
+          retention-days: 90
+
+  # 🐳 Deploy Docker Image
+  deploy-docker:
+    name: 🐳 Deploy Docker Image
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🏷️ Extract version
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: 🐳 Build Docker image
+        run: |
+          echo "🐳 Building Docker image..."
+          
+          # Create Dockerfile
+          cat > Dockerfile << 'EOF'
+          FROM ubuntu:22.04
+          
+          # Install dependencies
+          RUN apt-get update && apt-get install -y \
+              gum \
+              bash \
+              zsh \
+              git \
+              curl \
+              wget \
+              && rm -rf /var/lib/apt/lists/*
+          
+          # Copy framework files
+          COPY *.sh /opt/framework/
+          COPY themes/ /opt/framework/themes/
+          COPY README.md /opt/framework/
+          COPY LICENSE /opt/framework/
+          
+          # Set working directory
+          WORKDIR /opt/framework
+          
+          # Make scripts executable
+          RUN chmod +x *.sh
+          
+          # Set default shell
+          ENV SHELL=/bin/bash
+          
+          # Expose framework
+          ENV PATH="/opt/framework:$PATH"
+          
+          # Default command
+          CMD ["bash", "-c", "source gui_framework.sh && init_gui_framework && show_enhanced_main_menu"]
+          EOF
+          
+          # Build image
+          docker build -t shell-gui-framework:${{ steps.version.outputs.version }} .
+          docker tag shell-gui-framework:${{ steps.version.outputs.version }} shell-gui-framework:latest
+
+      - name: 🔐 Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: 📤 Push Docker image
+        run: |
+          echo "📤 Pushing Docker image..."
+          
+          # Tag for Docker Hub
+          docker tag shell-gui-framework:${{ steps.version.outputs.version }} ${{ secrets.DOCKER_USERNAME }}/shell-gui-framework:${{ steps.version.outputs.version }}
+          docker tag shell-gui-framework:latest ${{ secrets.DOCKER_USERNAME }}/shell-gui-framework:latest
+          
+          # Push images
+          docker push ${{ secrets.DOCKER_USERNAME }}/shell-gui-framework:${{ steps.version.outputs.version }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/shell-gui-framework:latest
+
+  # 📊 Deployment Status
+  deployment-status:
+    name: 📊 Deployment Status
+    runs-on: ubuntu-latest
+    needs: [create-release, deploy-docs, deploy-docker]
+    if: always()
+    steps:
+      - name: 📊 Generate deployment report
+        run: |
+          echo "📊 Generating deployment report..."
+          
+          echo "## 🚀 Deployment Status Report" > deployment_report.md
+          echo "" >> deployment_report.md
+          echo "**Date:** $(date -u)" >> deployment_report.md
+          echo "**Version:** ${{ needs.create-release.outputs.version || 'N/A' }}" >> deployment_report.md
+          echo "**Commit:** ${{ github.sha }}" >> deployment_report.md
+          echo "" >> deployment_report.md
+          
+          echo "### ✅ Deployment Results" >> deployment_report.md
+          echo "- GitHub Release: ${{ needs.create-release.result }}" >> deployment_report.md
+          echo "- Documentation: ${{ needs.deploy-docs.result }}" >> deployment_report.md
+          echo "- Docker Image: ${{ needs.deploy-docker.result }}" >> deployment_report.md
+          echo "" >> deployment_report.md
+          
+          echo "### 📦 Artifacts Created" >> deployment_report.md
+          if [[ "${{ needs.create-release.result }}" == "success" ]]; then
+            echo "- Release package: universal-shell-gui-framework-${{ needs.create-release.outputs.version }}.tar.gz" >> deployment_report.md
+            echo "- Checksum file: universal-shell-gui-framework-${{ needs.create-release.outputs.version }}.tar.gz.sha256" >> deployment_report.md
+          fi
+          
+          if [[ "${{ needs.deploy-docs.result }}" == "success" ]]; then
+            echo "- API documentation: docs/API.md" >> deployment_report.md
+            echo "- Installation guide: docs/INSTALLATION.md" >> deployment_report.md
+          fi
+          
+          if [[ "${{ needs.deploy-docker.result }}" == "success" ]]; then
+            echo "- Docker image: shell-gui-framework:${{ needs.create-release.outputs.version }}" >> deployment_report.md
+            echo "- Docker image: shell-gui-framework:latest" >> deployment_report.md
+          fi
+          
+          echo "" >> deployment_report.md
+          echo "### 🔗 Download Links" >> deployment_report.md
+          if [[ "${{ needs.create-release.result }}" == "success" ]]; then
+            echo "- [GitHub Release](https://github.com/jagoff/shell-gui-framework/releases/tag/${{ needs.create-release.outputs.version }})" >> deployment_report.md
+          fi
+          
+          if [[ "${{ needs.deploy-docker.result }}" == "success" ]]; then
+            echo "- [Docker Hub](https://hub.docker.com/r/${{ secrets.DOCKER_USERNAME }}/shell-gui-framework)" >> deployment_report.md
+          fi
+          
+          echo "" >> deployment_report.md
+          echo "---" >> deployment_report.md
+          echo "*Generated by GitHub Actions*" >> deployment_report.md
+
+      - name: 📤 Upload deployment report
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-report
+          path: deployment_report.md
+          retention-days: 30 
