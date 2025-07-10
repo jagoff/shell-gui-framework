@@ -22,8 +22,15 @@ A universal framework for creating stunning, interactive command-line interfaces
 
 ### 1. Install Dependencies
 ```bash
-# Install gum (required)
-brew install gum
+# Option A: Using Makefile (recommended)
+make install-deps
+
+# Option B: Manual installation
+brew install gum  # macOS
+# or
+sudo apt-get install gum  # Ubuntu/Debian
+# or
+sudo yum install gum  # CentOS/RHEL
 
 # Verify installation
 gum --version
@@ -36,6 +43,9 @@ gum --version
 
 # Include the framework
 source ./gui_framework.sh
+
+# Initialize the framework
+init_gui_framework
 
 # Use the functions
 main() {
@@ -57,6 +67,15 @@ main() {
 }
 
 main "$@"
+```
+
+### 3. Run Tests
+```bash
+# Run the test suite
+make test
+
+# Or manually
+./test_gui_framework.sh
 ```
 
 ## 📁 Repository Structure
@@ -142,17 +161,80 @@ show_gui_spinner "Installing..." sleep 3
 
 ## 📚 Documentation
 
+- **[API Reference](docs/API_REFERENCE.md)** - Complete function reference
 - **[Framework Guide](docs/FRAMEWORK_GUIDE.md)** - Complete implementation guide
 - **[Best Practices](docs/BEST_PRACTICES.md)** - Design and coding standards
 - **[Components](docs/COMPONENTS.md)** - All available GUI components
 - **[Examples](docs/EXAMPLES.md)** - Real-world usage examples
 
+## 🛠️ Development
+
+### Testing
+```bash
+# Run all tests
+make test
+
+# Run specific test categories
+./test_gui_framework.sh
+```
+
+### Code Quality
+```bash
+# Lint shell scripts
+make lint
+
+# Format code
+make format
+
+# Full validation
+make validate
+```
+
+### Building
+```bash
+# Create distribution package
+make package
+
+# Create release archive
+make release
+```
+
+### Development Setup
+```bash
+# Set up development environment
+make dev-setup
+```
+
 ## 🔧 Installation
 
-### Option 1: Direct Download
+### 🚀 Quick Installation (Recommended)
+
+#### Option 1: One-liner Installation
+```bash
+# Install from any Git repository
+curl -sSL https://raw.githubusercontent.com/jagoff/shell-gui-framework/main/install.sh | bash
+```
+
+#### Option 2: Clone and Install
+```bash
+# Clone and install
+git clone https://github.com/jagoff/shell-gui-framework.git
+cd shell-gui-framework
+./install.sh
+```
+
+#### Option 3: Direct Inclusion in Scripts
+```bash
+# Include directly in your script (no installation needed)
+source <(curl -sSL https://raw.githubusercontent.com/jagoff/shell-gui-framework/main/gui_framework.sh)
+```
+
+### 📦 Manual Installation
+
+#### Option 1: Direct Download
 ```bash
 # Download the framework
-curl -O https://raw.githubusercontent.com/your-username/universal-shell-gui-framework/main/gui_framework.sh
+curl -O https://raw.githubusercontent.com/jagoff/shell-gui-framework/main/gui_framework.sh
 
 # Make it executable
 chmod +x gui_framework.sh
@@ -161,16 +243,25 @@ chmod +x gui_framework.sh
 source ./gui_framework.sh
 ```
 
-### Option 2: Git Clone
+#### Option 2: Git Clone
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/universal-shell-gui-framework.git
+git clone https://github.com/jagoff/shell-gui-framework.git
 
 # Copy the framework to your project
-cp universal-shell-gui-framework/gui_framework.sh ./gui_framework.sh
+cp shell-gui-framework/gui_framework.sh ./gui_framework.sh
 
 # Include in your script
 source ./gui_framework.sh
+```
+
+### 🔄 Updating
+```bash
+# Update existing installation
+gui-framework update
+
+# Or manually
+./install.sh -u
 ```
 
 ## 🎯 Usage Examples

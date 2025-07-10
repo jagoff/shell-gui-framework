@@ -1,0 +1,73 @@
+{
+  "name": "universal-shell-gui-framework",
+  "version": "1.1.0",
+  "description": "A universal framework for creating stunning, interactive command-line interfaces using gum",
+  "main": "gui_framework.sh",
+  "bin": {
+    "gui-framework": "./install.sh"
+  },
+  "scripts": {
+    "test": "./test_gui_framework.sh",
+    "install": "./install.sh",
+    "demo": "./demo-usage.sh",
+    "lint": "shellcheck *.sh examples/*.sh",
+    "format": "shfmt -w *.sh examples/*.sh",
+    "package": "make package",
+    "release": "make release"
+  },
+  "keywords": [
+    "shell",
+    "bash",
+    "zsh",
+    "cli",
+    "gui",
+    "interactive",
+    "terminal",
+    "gum",
+    "framework",
+    "menu",
+    "dialog",
+    "tui"
+  ],
+  "author": "jagoff",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jagoff/shell-gui-framework.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jagoff/shell-gui-framework/issues"
+  },
+  "homepage": "https://github.com/jagoff/shell-gui-framework#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "gum": ">=0.13.0"
+  },
+  "devDependencies": {
+    "shellcheck": ">=0.8.0",
+    "shfmt": ">=3.0.0"
+  },
+  "files": [
+    "gui_framework.sh",
+    "install.sh",
+    "include.sh",
+    "quick-start.sh",
+    "demo-usage.sh",
+    "test_gui_framework.sh",
+    "Makefile",
+    "README.md",
+    "docs/",
+    "examples/",
+    "templates/"
+  ],
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "cpu": [
+    "x64",
+    "arm64"
+  ]
+} 
