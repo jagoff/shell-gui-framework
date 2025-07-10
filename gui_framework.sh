@@ -374,10 +374,46 @@ gui_validate_filename() {
 
 # --- FRAMEWORK INITIALIZATION ---
 init_gui_framework() {
+    # Initialize error handling first
+    if [[ -f "$(dirname "$0")/error_handler.sh" ]]; then
+        source "$(dirname "$0")/error_handler.sh"
+        init_error_handler
+    fi
+    
+    # Initialize shell compatibility
+    if [[ -f "$(dirname "$0")/shell_compatibility.sh" ]]; then
+        source "$(dirname "$0")/shell_compatibility.sh"
+        init_shell_compatibility
+    fi
+    
+    # Initialize theme system
+    if [[ -f "$(dirname "$0")/theme_manager.sh" ]]; then
+        source "$(dirname "$0")/theme_manager.sh"
+        init_theme_system
+    fi
+    
+    # Initialize integrations
+    if [[ -f "$(dirname "$0")/integrations.sh" ]]; then
+        source "$(dirname "$0")/integrations.sh"
+        init_integrations
+    fi
+    
+    # Load configuration and check dependencies
     load_gui_config
     check_gui_dependencies
     setup_gum_config
-    gui_log_info "GUI framework initialized"
+    
+    # Validate shell environment
+    if command -v validate_shell_environment >/dev/null; then
+        validate_shell_environment
+    fi
+    
+    # Validate error handling configuration
+    if command -v validate_error_config >/dev/null; then
+        validate_error_config
+    fi
+    
+    gui_log_info "GUI framework initialized with enhanced features"
 }
 
 # --- END OF UNIVERSAL SHELL GUI FRAMEWORK --- 

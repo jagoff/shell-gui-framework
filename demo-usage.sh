@@ -4,7 +4,7 @@
 
 # --- FRAMEWORK INCLUSION ---
 # Method 1: Direct inclusion from Git (no installation needed)
-echo "🎨 Loading Universal Shell GUI Framework..."
+echo "🎨 Loading Universal Shell GUI Framework Enhanced Edition..."
 source <(curl -sSL https://raw.githubusercontent.com/jagoff/shell-gui-framework/main/gui_framework.sh)
 
 # Method 2: Local inclusion (if you have the framework locally)
@@ -16,40 +16,63 @@ source <(curl -sSL https://raw.githubusercontent.com/jagoff/shell-gui-framework/
 # --- INITIALIZE FRAMEWORK ---
 init_gui_framework
 
+# --- CHECK FOR ENHANCED FEATURES ---
+if command -v show_enhanced_main_menu >/dev/null; then
+    ENHANCED_MENU_AVAILABLE=true
+    echo "✨ Enhanced features available!"
+else
+    ENHANCED_MENU_AVAILABLE=false
+    echo "ℹ️  Using basic framework features"
+fi
+
 # --- DEMONSTRATION FUNCTIONS ---
 
 # Function to demonstrate basic menu
 demo_basic_menu() {
-    gui_log_info "Demonstrating basic menu..."
+    gui_log_info "Demonstrating menu system..."
     
-    local choice=$(show_gui_menu \
-        "Demo Application" \
-        "Select a demonstration to run" \
-        "Choose an option:" \
-        "📊 System Information" \
-        "🔧 Configuration" \
-        "📝 Data Entry" \
-        "🔄 Multi-Select" \
-        "❌ Exit Demo")
-    
-    case "$choice" in
-        "📊 System Information")
-            demo_system_info
-            ;;
-        "🔧 Configuration")
-            demo_configuration
-            ;;
-        "📝 Data Entry")
-            demo_data_entry
-            ;;
-        "🔄 Multi-Select")
-            demo_multi_select
-            ;;
-        "❌ Exit Demo")
-            gui_log_success "Demo completed!"
-            exit 0
-            ;;
-    esac
+    if [[ "$ENHANCED_MENU_AVAILABLE" == "true" ]]; then
+        # Use enhanced menu if available
+        show_enhanced_main_menu
+    else
+        # Fallback to basic menu
+        local choice=$(show_gui_menu \
+            "Demo Application" \
+            "Select a demonstration to run" \
+            "Choose an option:" \
+            "📊 System Information" \
+            "🔧 Configuration" \
+            "📝 Data Entry" \
+            "🔄 Multi-Select" \
+            "🎨 Theme Demo" \
+            "🔧 Integration Demo" \
+            "❌ Exit Demo")
+        
+        case "$choice" in
+            "📊 System Information")
+                demo_system_info
+                ;;
+            "🔧 Configuration")
+                demo_configuration
+                ;;
+            "📝 Data Entry")
+                demo_data_entry
+                ;;
+            "🔄 Multi-Select")
+                demo_multi_select
+                ;;
+            "🎨 Theme Demo")
+                demo_theme_features
+                ;;
+            "🔧 Integration Demo")
+                demo_integration_features
+                ;;
+            "❌ Exit Demo")
+                gui_log_success "Demo completed!"
+                exit 0
+                ;;
+        esac
+    fi
 }
 
 # Function to demonstrate system information
@@ -189,6 +212,90 @@ demo_error_handling() {
         else
             gui_log_warning "No action taken"
         fi
+    fi
+}
+
+# Function to demonstrate theme features
+demo_theme_features() {
+    gui_log_info "Theme Features Demo:"
+    
+    if command -v show_theme_manager >/dev/null; then
+        echo "🎨 Theme system is available!"
+        echo "You can customize colors, fonts, and layouts."
+        
+        if show_gui_confirmation "Open theme manager?"; then
+            show_theme_manager
+        fi
+    else
+        echo "ℹ️  Theme system not available in this demo"
+        echo "Install the full framework for theme support."
+    fi
+    
+    # Show current theme information
+    if command -v get_current_theme >/dev/null; then
+        local current_theme=$(get_current_theme)
+        echo "Current theme: $current_theme"
+    fi
+}
+
+# Function to demonstrate integration features
+demo_integration_features() {
+    gui_log_info "Integration Features Demo:"
+    
+    if command -v show_integration_manager >/dev/null; then
+        echo "🔧 Integration system is available!"
+        echo "You can use tools like Git, Docker, FZF, and more."
+        
+        if show_gui_confirmation "Open integration manager?"; then
+            show_integration_manager
+        fi
+    else
+        echo "ℹ️  Integration system not available in this demo"
+        echo "Install the full framework for integration support."
+    fi
+    
+    # Show available integrations
+    if command -v get_available_integrations >/dev/null; then
+        local available_integrations=($(get_available_integrations))
+        if [[ ${#available_integrations[@]} -gt 0 ]]; then
+            echo "Available integrations:"
+            for integration in "${available_integrations[@]}"; do
+                echo "  ✅ $integration"
+            done
+        fi
+    fi
+}
+
+# Function to demonstrate shell compatibility
+demo_shell_compatibility() {
+    gui_log_info "Shell Compatibility Demo:"
+    
+    if command -v get_shell_name >/dev/null; then
+        local shell_name=$(get_shell_name)
+        local shell_version=$(get_shell_version)
+        
+        echo "Current shell: $shell_name"
+        echo "Shell version: $shell_version"
+        
+        if command -v is_shell_supported >/dev/null; then
+            if is_shell_supported; then
+                echo "✅ Shell is fully supported"
+            else
+                echo "⚠️  Shell has limited support"
+            fi
+        fi
+        
+        if command -v get_shell_capabilities >/dev/null; then
+            local capabilities=($(get_shell_capabilities))
+            if [[ ${#capabilities[@]} -gt 0 ]]; then
+                echo "Shell capabilities:"
+                for capability in "${capabilities[@]}"; do
+                    echo "  • $capability"
+                done
+            fi
+        fi
+    else
+        echo "ℹ️  Shell compatibility system not available"
     fi
 }
 
